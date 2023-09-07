@@ -31,9 +31,15 @@ export class MerchandiseService {
   }
 
   public create(merchandiseToCreate: MerchandiseToCreate): Observable<any> {
-    return this.http.post<MerchandisePageable>(
+    return this.http.post<any>(
       `${this.baseUrl}api/v1/merchandise`,
       merchandiseToCreate
+    );
+  }
+
+  public delete(merchandiseId: number): Observable<any> {
+    return this.http.delete<any>(
+      `${this.baseUrl}api/v1/merchandise/${merchandiseId}`
     );
   }
 }

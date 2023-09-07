@@ -109,6 +109,7 @@ export class MerchandiseComponent implements OnInit {
 
   restore() {
     this.filter.type = 0;
+    this.filter.value = '';
     this.length = 0;
     this.pageIndex = 0;
     this.pageSize = 5;
@@ -117,5 +118,27 @@ export class MerchandiseComponent implements OnInit {
 
   redirecting() {
     this.router.navigate(['/users']);
+  }
+
+  delete(merchandiseId: number){
+    Swal.fire({
+      title: 'Eliminar mercancia',
+      text: `Estas seguro de eliminar la mercancia con id ${merchandiseId}`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Cancelar',
+      confirmButtonText: 'Ok'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.merchandiseService.delete(merchandiseId).subscribe({
+          next: (r)=>{
+            Swal.fire('Exito:', 'Se ha eliminado la mercancia con exito!', 'success');
+            this.restore();
+          },
+        })
+      }
+    })
   }
 }
