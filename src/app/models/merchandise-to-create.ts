@@ -1,6 +1,6 @@
 export class MerchandiseToCreate {
     amount:         number;
-    dateEntry:      string;
+    dateEntry:      Date;
     name:           string;
     registeredById: number;
 }
