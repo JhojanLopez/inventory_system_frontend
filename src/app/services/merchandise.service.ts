@@ -11,12 +11,20 @@ export class MerchandiseService {
 
   constructor(private http: HttpClient) {}
 
+  //public getAllPagination(page: number, size: number): Observable<any> {
+  //  const params = new HttpParams().set('page', page).set('size', size);
+//
+  //  return this.http.get<MerchandisePageable[]>(
+  //    `${this.baseUrl}api/v1/merchandise`,
+  //    { params: params }
+  //  );
+  //}
+
   public getAllPagination(page: number, size: number): Observable<any> {
-    const params = new HttpParams().set('page', page).set('size', size);
+    //const params = new HttpParams().set('page', page).set('size', size);
 
     return this.http.get<MerchandisePageable[]>(
-      `${this.baseUrl}api/v1/merchandise`,
-      { params: params }
+      `${this.baseUrl}api/v1/merchandise?page=${page}&size=${size}`,
     );
   }
 

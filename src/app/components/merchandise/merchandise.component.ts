@@ -83,7 +83,7 @@ export class MerchandiseComponent implements OnInit {
   }
 
   reloadAfterFilterById(data: MerchandisePageable) {
-    this.merchandises.slice(0);
+   // this.merchandises.slice(0);
 
     this.merchandises = [data];
     this.length = 1;
