@@ -15,14 +15,23 @@
   <div class="col-md-6">
     <label for="name" class="form-label">Nombre</label>
     <input type="text" class="form-control" id="name" formControlName="name" required>
+    <div *ngIf="fieldValidator('name')" class="mt-1">
+      <p class="text-danger">* {{ getError('name') }}</p>
+   </div>
   </div>
   <div class="col-md-6">
     <label for="amount" class="form-label">Cantidad</label>
-    <input type="number" min="0" class="form-control" formControlName="amount" required>
+    <input type="number" min="0" inputmode="numeric" step="1" class="form-control" formControlName="amount" required>
+    <div *ngIf="fieldValidator('amount')" class="mt-1">
+      <p class="text-danger">* {{ getError('amount') }}</p>
+   </div>
   </div>
   <div class="col-md-12">
     <label for="dateEntry" class="form-label">Fecha de ingreso</label>
     <input type="date" class="form-control" formControlName="dateEntry" required>
+    <div *ngIf="fieldValidator('dateEntry')" class="mt-1">
+      <p class="text-danger">* {{ getError('dateEntry') }}</p>
+   </div>
   </div>
 
   <div class="col-12 text-center mt-5">
