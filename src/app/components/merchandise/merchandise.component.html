@@ -1,8 +1,15 @@
+<div class="row mt-5">
+  <div class="col-auto">
+   <a class="btn btn-primary" routerLink="/create-merchandise">
+      <i class="fa solid fa-plus"></i>  Crear mercancia
+   </a> 
+  </div>
+</div>
 <div class="card text-white my-4" >
     <div class="card-header"> 
     
       <!--filtros-->
-      <form class="mt-2 row g-3 justify-content-end">
+      <form class="mt-2 row g-3 justify-content-end" >
         <div class="col-auto">
           <select [(ngModel)]="filter.type" name="type" class="form-select form-select-sm" aria-label=".form-select-sm example" [ngStyle]="{'width': '200px'}">
             <option selected value="0">Tipo de filtro</option>

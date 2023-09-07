@@ -9,14 +9,16 @@ import { MerchandiseComponent } from './components/merchandise/merchandise.compo
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CreateMerchandiseComponent } from './components/create-merchandise/create-merchandise.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
     MerchandiseComponent,
-    NavbarComponent
+    NavbarComponent,
+    CreateMerchandiseComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +26,8 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     BrowserAnimationsModule,
     MatPaginatorModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

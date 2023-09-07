@@ -39,4 +39,10 @@ export class MerchandiseService {
       `${this.baseUrl}api/v1/merchandise/${merchandiseId}`
     );
   }
+
+  public create(merchandiseId: number): Observable<any> {
+    return this.http.get<MerchandisePageable>(
+      `${this.baseUrl}api/v1/merchandise/${merchandiseId}`
+    );
+  }
 }
