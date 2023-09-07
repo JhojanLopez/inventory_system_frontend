@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { MerchandisePageable } from 'src/app/interfaces/merchandisePageable';
 import { Filter } from 'src/app/models/filter';
 import { MerchandiseService } from 'src/app/services/merchandise.service';
+import { Router } from '@angular/router';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-merchandise',
@@ -19,9 +21,21 @@ export class MerchandiseComponent implements OnInit {
   merchandises: MerchandisePageable[];
   filter: Filter;
 
-  constructor(private merchandiseService: MerchandiseService) {}
+  constructor(
+    private userService: UsersService,
+    private merchandiseService: MerchandiseService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    if (this.userService.isUserLogged()) {
+      this.init();
+      this.reload();
+    } else {
+      this.redirecting();
+    }
+  }
+  init() {
     this.title = 'Mercancia';
     this.length = 0;
     this.pageIndex = 0;
@@ -31,13 +45,6 @@ export class MerchandiseComponent implements OnInit {
       type: 0,
       value: '',
     };
-    this.reload();
-  }
-
-  paginator(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.reload();
   }
 
   private reload() {
@@ -47,30 +54,38 @@ export class MerchandiseComponent implements OnInit {
         next: (r) => {
           this.merchandises = r.content;
           this.length = r.totalElements;
-        }
+        },
       });
+  }
+
+  paginator(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.reload();
   }
 
   search() {
     console.log(this.filter);
-    if (this.filter.type == 0){
-      Swal.fire('Información:', `Por favor selecciona el tipo de filtro para realizar la búsqueda`, 'info');
+    if (this.filter.type == 0) {
+      Swal.fire(
+        'Información:',
+        `Por favor selecciona el tipo de filtro para realizar la búsqueda`,
+        'info'
+      );
       return;
     }
     //by id
     if (this.filter.type == 1) {
-      this.merchandiseService
-        .findById(parseInt(this.filter.value))
-        .subscribe({
-          next: (r) => {
-            console.log(r);
-            this.reloadAfterFilterById(r);
-          },
-          error: (e)=>{
-            Swal.fire('Advertencia:', `Mercancia no existente`, 'warning');
-            console.log('error en la peticion '+e.message)
-          }
-        });
+      this.merchandiseService.findById(parseInt(this.filter.value)).subscribe({
+        next: (r) => {
+          console.log(r);
+          this.reloadAfterFilterById(r);
+        },
+        error: (e) => {
+          Swal.fire('Advertencia:', `Mercancia no existente`, 'warning');
+          console.log('error en la peticion ' + e.message);
+        },
+      });
     }
 
     //by name
@@ -83,8 +98,6 @@ export class MerchandiseComponent implements OnInit {
   }
 
   reloadAfterFilterById(data: MerchandisePageable) {
-   // this.merchandises.slice(0);
-
     this.merchandises = [data];
     this.length = 1;
   }
@@ -100,5 +113,9 @@ export class MerchandiseComponent implements OnInit {
     this.pageIndex = 0;
     this.pageSize = 5;
     this.reload();
+  }
+
+  redirecting() {
+    this.router.navigate(['/users']);
   }
 }
