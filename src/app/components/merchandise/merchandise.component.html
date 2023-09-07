@@ -1,0 +1,67 @@
+<div class="card text-white my-4" >
+    <div class="card-header"> 
+    
+      <!--filtros-->
+      <form class="mt-2 row g-3 justify-content-end">
+        <div class="col-auto">
+          <select [(ngModel)]="filter.type" name="type" class="form-select form-select-sm" aria-label=".form-select-sm example" [ngStyle]="{'width': '200px'}">
+            <option selected value="0">Tipo de filtro</option>
+            <option value="1">Código</option>
+            <option value="2">Coincidencia de nombre</option>
+          </select>
+        </div>
+        <div class="col-auto" *ngIf="filter.type==1">
+          <input [(ngModel)]="filter.value" class="form-control form-control-sm" name="value" type="number" min="0" [ngStyle]="{'width': '200px'}">
+        </div>
+        <div class="col-auto" *ngIf="filter.type==2">
+          <input [(ngModel)]="filter.value" class="form-control form-control-sm" name="value" type="text" [ngStyle]="{'width': '200px'}">
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary" title="buscar" (click)="search()"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-primary" title="restaurar"  (click)="restore()"><i class="fa fa-refresh"></i></button>
+        </div>
+      </form>
+    </div>
+    <!--tabla-->
+    <div class="card-body">
+        <div class="table-responsive">
+
+          <table class="table table table-hover text-center">
+                <thead>
+                  <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Fecha de ingreso</th>
+                    <th scope="col">Editar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let merchandise of merchandises">
+                    <th scope="row">{{merchandise.id}}</th>
+                    <td>{{merchandise.name}}</td>
+                    <td>{{merchandise.amount}}</td>
+                    <td>{{merchandise.dateEntry | date: 'mediumDate'}}</td>
+                    <!--se debe pasar con [routerLink] con corchetes ya que pasamos una ruta y la variable-->
+                    <td><button class="btn btn-warning" [routerLink]="['/alumnos/form', merchandise.id]"> Editar </button></td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                    
+                </tfoot>
+                
+              </table>
+
+            <mat-paginator [length]="length"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="pageSizeOptions"
+              [pageIndex]="pageIndex"
+              (page)="paginator($event)"
+              >
+            </mat-paginator>
+          </div>
+    </div>
+</div>
+
