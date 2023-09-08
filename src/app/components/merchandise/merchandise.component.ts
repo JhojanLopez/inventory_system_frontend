@@ -6,6 +6,8 @@ import { Filter } from 'src/app/models/filter';
 import { MerchandiseService } from 'src/app/services/merchandise.service';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
+import { MerchandiseDetail } from 'src/app/models/merchandiseDetail';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-merchandise',
@@ -119,26 +121,57 @@ export class MerchandiseComponent implements OnInit {
   redirecting() {
     this.router.navigate(['/users']);
   }
+  verifyDelete(merchandiseId: number) {
+    const username: string = this.userService.getUserLogged().name;
+    let merchandiseDetail: MerchandiseDetail;
 
-  delete(merchandiseId: number){
-    Swal.fire({
-      title: 'Eliminar mercancia',
-      text: `Estas seguro de eliminar la mercancia con id ${merchandiseId}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Ok'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.merchandiseService.delete(merchandiseId).subscribe({
-          next: (r)=>{
-            Swal.fire('Exito:', 'Se ha eliminado la mercancia con exito!', 'success');
-            this.restore();
-          },
-        })
-      }
-    })
+    this.merchandiseService.findById(merchandiseId).subscribe({
+      next: (r) => {
+        merchandiseDetail = r;
+        if (merchandiseDetail.registeredByName === username){
+          this.delete(merchandiseId);
+        }else{
+          alertErrorDelete();
+        }
+      },
+    });
   }
+
+  delete(merchandiseId: number) {
+    if (this.verifyDelete) {
+      Swal.fire({
+        title: 'Eliminar mercancia',
+        text: `Estas seguro de eliminar la mercancia con id ${merchandiseId}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Ok',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.merchandiseService.delete(merchandiseId).subscribe({
+            next: (r) => {
+              Swal.fire(
+                'Exito:',
+                'Se ha eliminado la mercancia con exito!',
+                'success'
+              );
+              this.restore();
+            },
+          });
+        }
+      });
+    }
+  }
+
+
 }
+function alertErrorDelete() {
+  Swal.fire(
+    'Advertencia:',
+    'Solo puedes eliminar las mercancias registradas por ti',
+    'warning'
+  );
+}
+
