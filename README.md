@@ -1,5 +1,5 @@
 # Sistema de inventario
-Sistema de invetario el cual permite realizar la gestion a distintas mercancias que queramos registrar, modificar, eliminar. proyecto generado por [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
+Sistema de inventario el cual permite realizar la gestion a distintas mercancias que queramos registrar, modificar, eliminar. proyecto generado por [Angular CLI](https://github.com/angular/angular-cli) version 16.1.4.
 
 ## Requerimientos
 El sistema requiere todo el ambiente de microservicios con spring cloud, para ello es indispensable que se use el [docker compose](https://github.com/JhojanLopez/inventory_system) añadido en la raiz del proyecto.
