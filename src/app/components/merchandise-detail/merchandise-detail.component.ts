@@ -7,28 +7,31 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MerchandiseToCreate } from 'src/app/models/merchandise-to-create';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MerchandiseToUpdate } from 'src/app/models/merchandise-to-update';
+import { MerchandiseDetail } from 'src/app/models/merchandiseDetail';
 import { MerchandiseService } from 'src/app/services/merchandise.service';
 import { UsersService } from 'src/app/services/users.service';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-create-merchandise',
-  templateUrl: './create-merchandise.component.html',
-  styleUrls: ['./create-merchandise.component.css'],
+  selector: 'app-merchandise-detail',
+  templateUrl: './merchandise-detail.component.html',
+  styleUrls: ['./merchandise-detail.component.css'],
 })
-export class CreateMerchandiseComponent implements OnInit {
-  merchandiseToCreate: MerchandiseToCreate;
+export class MerchandiseDetailComponent implements OnInit {
   form: FormGroup;
-  
+  merchandise: MerchandiseDetail;
+  merchandiseToUpdate: MerchandiseToUpdate;
+  isUpdate: boolean;
+
   constructor(
     private fb: FormBuilder,
-    private merchandiseService: MerchandiseService,
     private userService: UsersService,
+    private merchandiseService: MerchandiseService,
+    private route: ActivatedRoute,
     private router: Router
   ) {}
-
 
   ngOnInit(): void {
     if (this.userService.isUserLogged()) {
@@ -36,11 +39,24 @@ export class CreateMerchandiseComponent implements OnInit {
     } else {
       this.redirectingUsers();
     }
-
   }
-  
+
   init() {
-    this.merchandiseToCreate = new MerchandiseToCreate();
+    this.merchandise = new MerchandiseDetail();
+    this.isUpdate = false;
+
+    this.route.paramMap.subscribe((params) => {
+      const id: number = +params.get('id');
+      if (id) {
+        this.merchandiseService
+          .findById(id)
+          .subscribe((r) => ((this.merchandise = r), this.initForm()));
+      } else {
+        redirectingMerchandise();
+      }
+    });
+  }
+  initForm() {
     this.form = this.fb.group({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       amount: new FormControl('', [
@@ -50,38 +66,39 @@ export class CreateMerchandiseComponent implements OnInit {
       ]),
       dateEntry: new FormControl('', [Validators.required, this.dateValidator]),
     });
-  }
 
-  create() {
-    this.merchandiseToCreate = this.form.value;
-    this.merchandiseToCreate.registeredById = this.userService.getUserLogged().id;
-
-    console.log(this.merchandiseToCreate);
-
-    this.merchandiseService.create(this.merchandiseToCreate).subscribe({
-      next: (r) => {
-        console.log(r);
-        Swal.fire('Exito:', `Se ha creado la mercancia con exito!`, 'success');
-        this.refresh();
-        this.router.navigate(['/merchandise']);
-      },
-      error: (e) => {
-        console.log(e);
-        Swal.fire(
-          'Error:',
-          `Ya existe una mercancia con el mismo nombre, por favor escoge otro`,
-          'error'
-        );
-      }
+    console.log(this.merchandise);
+    this.form.patchValue({
+      name: this.merchandise.name,
+      amount: this.merchandise.amount,
+      dateEntry: this.merchandise.dateEntry, // Fecha actual en formato 'YYYY-MM-DD'
     });
   }
+  redirectingUsers() {
+    this.form = this.fb.group({
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      amount: new FormControl('', [
+        Validators.required,
+        Validators.min(0),
+        this.amountValidator,
+      ]),
+      dateEntry: new FormControl('', [Validators.required, this.dateValidator]),
+    });
 
-  refresh() {
-    this.merchandiseToCreate.name = '';
-    this.merchandiseToCreate.amount = null;
-    this.merchandiseToCreate.dateEntry = null;
-    this.merchandiseToCreate.registeredById = null;
-    this.form.reset();
+    console.log(this.merchandise);
+    this.form.patchValue({
+      name: this.merchandise.name,
+      amount: this.merchandise.amount,
+      dateEntry: this.merchandise.dateEntry, // Fecha actual en formato 'YYYY-MM-DD'
+    });
+    this.router.navigate(['/users']);
+  }
+
+  toUpdate() {
+    this.isUpdate = true;
+  }
+  toDetail() {
+    this.isUpdate = false;
   }
 
   getFormControls(): any {
@@ -161,7 +178,29 @@ export class CreateMerchandiseComponent implements OnInit {
     return 'La fecha de ingreso no puede ser posterior a la fecha actual';
   }
 
-  redirectingUsers() {
-    this.router.navigate(['/users']);
+  update() {
+    const id: number = this.merchandise.id;
+    const merchandiseToUpdate: MerchandiseToUpdate = this.form.value;
+    merchandiseToUpdate.updatedById = this.userService.getUserLogged().id;
+
+    this.merchandiseService.update(id, merchandiseToUpdate).subscribe({
+      next: (r) => {
+        console.log(r);
+        Swal.fire('Exito:', `Se actualizo la mercancia con exito!`, 'success');
+        this.router.navigate(['/merchandise']);
+      },
+      error: (e) => {
+        console.log(e);
+        Swal.fire(
+          'Error:',
+          `Ya existe una mercancia con el mismo nombre, por favor escoge otro`,
+          'error'
+        );
+      },
+    });
   }
+}
+
+function redirectingMerchandise() {
+  this.router.navigate(['/merchandise']);
 }

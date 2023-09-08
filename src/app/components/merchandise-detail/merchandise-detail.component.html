@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+<div class="container-fluid">
+  <div class="row mt-5" *ngIf="!isUpdate">
+      <div class="col-auto">
+       <a class="btn btn-primary" routerLink="/merchandise">
+          <i class="fa solid fa-backward"></i> Listado de mercancia
+       </a> 
+      </div>
+  </div>
+  <div class="row mt-5" *ngIf="isUpdate">
+    <div class="col-auto">
+         <input class="btn btn-primary w-50" value="Ver detalle" (click)="toDetail()"/>
+    </div>
+   </div>
+  
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="card text-dark my-4" [ngStyle]="{'width': '1000px'}">
+  
+
+  <div class="card-body">
+   <div *ngIf="!isUpdate" class="fs-6">
+    <div>
+        <h1 class="card-title pricing-card-title text-center fs-3 mb-4">{{ merchandise.name }}</h1>
+    </div>
+    <div class="list-unstyled mt-4 mb-4 text-center">
+      <div class="mt-2 mb-4">
+        <p>Registrado por: <span>{{merchandise.registeredByName}}</span></p>        
+        <p>Fecha de ingreso: {{merchandise.dateEntry | date}}</p>
+        <p>Fecha de creacion: {{merchandise.createdAt | date}}</p>
+      </div>
+      
+      <div *ngIf="merchandise.updatedByName" class="mt-2 mb-4">
+        <p>Fecha ultima actualizacion: {{merchandise.updatedAt | date }}</p>
+        <p>Ultima actualizacion hecha por: {{merchandise.updatedByName }}</p>
+        
+          
+      </div>
+      <div>
+        <p>Cantidad actual: {{merchandise.amount}}</p>
+      </div>
+    </div>
+     <div class="col-12 text-center mt-5">
+      <input class="btn btn-primary w-50" value="Modificar" (click)="toUpdate()"/>
+    </div>
+   </div>
+  <form class="row g-3" *ngIf="isUpdate" [formGroup]="form" (ngSubmit)="update()">
+    <div class="col-md-6">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="name" formControlName="name"  required>
+      <div *ngIf="fieldValidator('name')" class="mt-1">
+        <p class="text-danger">* {{ getError('name') }}</p>
+     </div>
+    </div>
+    <div class="col-md-6">
+      <label for="amount" class="form-label">Cantidad</label>
+      <input type="number" min="0" inputmode="numeric" step="1" class="form-control" formControlName="amount" required>
+      <div *ngIf="fieldValidator('amount')" class="mt-1">
+        <p class="text-danger">* {{ getError('amount') }}</p>
+     </div>
+    </div>
+    <div class="col-md-12">
+      <label for="dateEntry" class="form-label">Fecha de ingreso</label>
+      <input type="date" class="form-control" formControlName="dateEntry" required>
+      <div *ngIf="fieldValidator('dateEntry')" class="mt-1">
+        <p class="text-danger">* {{ getError('dateEntry') }}</p>
+     </div>
+    </div>
+  
+    <div class="col-12 text-center mt-5">
+      <input class="btn btn-primary" type="submit" value="Actualizar" [disabled]="!form.valid"/>
+    </div>
+  </form>
+  </div>
+ </div>
+</div>
+</div>

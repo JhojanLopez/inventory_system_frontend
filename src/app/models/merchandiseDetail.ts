@@ -1,4 +1,4 @@
-export interface MerchandiseDetail {
+export class MerchandiseDetail {
     id:               number;
     name:             string;
     amount:           number;

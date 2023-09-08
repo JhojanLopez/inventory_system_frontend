@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateMerchandiseComponent } from './components/create-merchandise/create-merchandise.component';
+import { MerchandiseDetailComponent } from './components/merchandise-detail/merchandise-detail.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { CreateMerchandiseComponent } from './components/create-merchandise/crea
     UsersComponent,
     MerchandiseComponent,
     NavbarComponent,
-    CreateMerchandiseComponent
+    CreateMerchandiseComponent,
+    MerchandiseDetailComponent
   ],
   imports: [
     BrowserModule,

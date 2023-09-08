@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MerchandisePageable } from '../interfaces/merchandisePageable';
 import { MerchandiseToCreate } from '../models/merchandise-to-create';
+import { MerchandiseDetail } from '../models/merchandiseDetail';
+import { MerchandiseToUpdate } from '../models/merchandise-to-update';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +27,7 @@ export class MerchandiseService {
   }
 
   public findById(merchandiseId: number): Observable<any> {
-    return this.http.get<MerchandisePageable>(
+    return this.http.get<MerchandiseDetail>(
       `${this.baseUrl}api/v1/merchandise/${merchandiseId}`
     );
   }
@@ -34,6 +36,12 @@ export class MerchandiseService {
     return this.http.post<any>(
       `${this.baseUrl}api/v1/merchandise`,
       merchandiseToCreate
+    );
+  }
+  public update(merchandiseId: number,merchandiseToUpdate: MerchandiseToUpdate): Observable<any> {
+    return this.http.put<any>(
+      `${this.baseUrl}api/v1/merchandise/${merchandiseId}`,
+      merchandiseToUpdate
     );
   }
 

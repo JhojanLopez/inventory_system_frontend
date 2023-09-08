@@ -123,7 +123,7 @@ export class MerchandiseComponent implements OnInit {
   delete(merchandiseId: number){
     Swal.fire({
       title: 'Eliminar mercancia',
-      text: `Estas seguro de eliminar la mercancia con id ${merchandiseId}`,
+      text: `Estas seguro de eliminar la mercancia con id ${merchandiseId}?`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

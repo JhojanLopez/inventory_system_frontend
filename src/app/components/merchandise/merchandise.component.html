@@ -54,7 +54,7 @@
                     <td>{{merchandise.name}}</td>
                     <td>{{merchandise.amount}}</td>
                     <td>{{merchandise.dateEntry | date: 'mediumDate'}}</td>
-                    <td><button class="btn btn-warning" [routerLink]="['/alumnos/form', merchandise.id]"> Editar </button></td>
+                    <td><button class="btn btn-warning" [routerLink]="['/merchandise-detail', merchandise.id]"> Editar </button></td>
                     <td><button class="btn btn-danger" (click)="delete(merchandise.id)"> Eliminar </button></td>
 
                   </tr>
